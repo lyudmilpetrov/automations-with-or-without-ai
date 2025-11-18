@@ -1,0 +1,56 @@
+:root {
+  font-family: 'Inter', 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #f8fafc;
+  background-color: #020617;
+  --surface-dark: #020617;
+  --surface-darker: #0b1220;
+  --surface-card-dark: rgba(15, 23, 42, 0.9);
+  --surface-light: #f8fafc;
+  --surface-card-light: rgba(255, 255, 255, 0.92);
+  --brand-primary: #10b981;
+  --brand-secondary: #34d399;
+  --brand-muted-dark: #94a3b8;
+  --brand-muted-light: #334155;
+  --text-dark: #0f172a;
+  --page-bg: var(--surface-dark);
+  --page-text: #e2e8f0;
+  --card-gradient-dark: radial-gradient(circle at top, rgba(16, 185, 129, 0.18), transparent 60%),
+    linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.95));
+  --card-bg: var(--card-gradient-dark);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --muted-text: rgba(226, 232, 240, 0.9);
+  --shadow-card: 0 25px 80px rgba(15, 23, 42, 0.35);
+  --shadow-glow: 0 20px 60px rgba(16, 185, 129, 0.25);
+}
+
+.dark {
+  --page-bg: var(--surface-light);
+  --page-text: var(--text-dark);
+  --card-bg: var(--surface-card-light);
+  --card-border: rgba(148, 163, 184, 0.45);
+  --muted-text: #475569;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: inherit;
+  background-color: var(--page-bg);
+  color: var(--page-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
