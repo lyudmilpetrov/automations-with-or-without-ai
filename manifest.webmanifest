@@ -21,13 +21,13 @@
   ],
   "icons": [
     {
-      "src": "/icons/app-icon.svg",
+      "src": "app-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/icons/app-icon-maskable.svg",
+      "src": "app-icon-maskable.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
