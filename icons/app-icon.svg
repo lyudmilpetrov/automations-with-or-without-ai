@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Automations app icon">
+  <rect width="512" height="512" rx="112" fill="#030617" />
+  <path
+    d="M256 128c70.7 0 128 57.3 128 128s-57.3 128-128 128-128-57.3-128-128 57.3-128 128-128zm0 48a80 80 0 100 160 80 80 0 000-160z"
+    fill="#38bdf8"
+  />
+</svg>

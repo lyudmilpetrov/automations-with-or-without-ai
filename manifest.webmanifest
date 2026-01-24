@@ -2,17 +2,35 @@
   "name": "Automations with Free AI or Without",
   "short_name": "Automations",
   "start_url": "/",
+  "id": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "description": "Data automations that blend trusted business logic with AI experiences on your infrastructure.",
+  "categories": ["business", "productivity", "utilities"],
+  "orientation": "portrait",
   "background_color": "#030617",
   "theme_color": "#030617",
+  "shortcuts": [
+    {
+      "name": "Explore automations",
+      "short_name": "Explore",
+      "description": "Jump into the automation catalog.",
+      "url": "/?source=shortcut"
+    }
+  ],
   "icons": [
     {
-      "src": "/vite.svg",
+      "src": "/icons/app-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
+    },
+    {
+      "src": "/icons/app-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
   ]
 }
