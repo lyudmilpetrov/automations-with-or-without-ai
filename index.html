@@ -2,6 +2,24 @@
 <html lang="en" class="antialiased">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      ;(() => {
+        const redirect = window.location.search.match(/[?&]p=([^&]+)/)
+
+        if (!redirect) {
+          return
+        }
+
+        const decodedPath = decodeURIComponent(redirect[1]).replace(/~and~/g, '&')
+        const queryWithoutRedirect = window.location.search
+          .replace(/([?&])p=[^&]*&?/, '$1')
+          .replace(/[?&]$/, '')
+        const hash = window.location.hash || ''
+        const restoredUrl = `${window.location.origin}${decodedPath}${queryWithoutRedirect}${hash}`
+
+        window.history.replaceState(null, '', restoredUrl)
+      })()
+    </script>
     <link rel="icon" type="image/svg+xml" href="gear.svg" />
     <link rel="apple-touch-icon" href="app-icon.svg" />
     <link rel="manifest" href="manifest.webmanifest" />
@@ -18,7 +36,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600&display=swap"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="index-Tm6h7zIW.js"></script>
+    <script type="module" crossorigin src="index-DUpHTsHf.js"></script>
     <link rel="stylesheet" crossorigin href="index-BFFl_5gI.css">
   </head>
   <body>
