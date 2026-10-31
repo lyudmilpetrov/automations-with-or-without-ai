@@ -1,11 +1,10 @@
 import { useEffect } from 'react'
 
 import { useI18n } from '../i18n'
-import { useRouter } from '../router'
+import { NavLink } from '../router/RouterProvider'
 import { buttonTokens, cardTokens, layoutTokens, textTokens } from '../styles/theme'
 
 export const ExploreDeliveryPlaybookPage = () => {
-  const { navigate } = useRouter()
   const { t } = useI18n()
   const playbook = t.playbook
 
@@ -18,15 +17,15 @@ export const ExploreDeliveryPlaybookPage = () => {
       <section className={`${layoutTokens.hero} playbook-hero`}>
         <div className="hero-content">
           <p className={textTokens.eyebrow}>{playbook.hero.eyebrow}</p>
-          <h1 className={textTokens.heroHeading}>{playbook.hero.heading}</h1>
+          <h1 id="page-heading" tabIndex={-1} className={textTokens.heroHeading}>{playbook.hero.heading}</h1>
           <p className={`${textTokens.lead} hero-lead`}>{playbook.hero.lead}</p>
           <div className="hero-actions">
-            <button className={`${buttonTokens.shared} ${buttonTokens.primary}`} onClick={() => navigate('/plan-my-workflow')}>
-              {playbook.hero.primaryCta}
-            </button>
-            <button className={`${buttonTokens.shared} ${buttonTokens.ghost}`} onClick={() => navigate('/')}>
+            <NavLink to="/plan-my-workflow" className={`${buttonTokens.shared} ${buttonTokens.primary}`}>
+              {playbook.hero.primaryCta} <span aria-hidden="true">↗</span>
+            </NavLink>
+            <NavLink to="/" className={`${buttonTokens.shared} ${buttonTokens.ghost}`}>
               {playbook.hero.secondaryCta}
-            </button>
+            </NavLink>
           </div>
         </div>
       </section>
@@ -37,15 +36,16 @@ export const ExploreDeliveryPlaybookPage = () => {
           <h2 className={textTokens.sectionHeading}>{playbook.immersion.heading}</h2>
           <p className={textTokens.sectionDescription}>{playbook.immersion.description}</p>
         </div>
-        <div className="playbook-card-grid">
-          {playbook.immersion.moments.map((moment) => (
-            <article key={moment.title} className={`${cardTokens.base} playbook-card`}>
-              <p className="card-eyebrow">{moment.outcome}</p>
+        <ol className="playbook-card-grid">
+          {playbook.immersion.moments.map((moment, index) => (
+            <li key={moment.title} className={`${cardTokens.base} playbook-step`}>
+              <span className="playbook-step__number" aria-hidden="true">0{index + 1}</span>
               <h3 className="card-title">{moment.title}</h3>
               <p className="card-text">{moment.detail}</p>
-            </article>
+              <p className="card-eyebrow">{moment.outcome}</p>
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
 
       <section className={`${layoutTokens.section} signal-section`}>
@@ -79,20 +79,22 @@ export const ExploreDeliveryPlaybookPage = () => {
         </div>
         <div className="experiment-grid">
           {playbook.experiments.tracks.map((track) => (
-            <article key={track.title} className={`${cardTokens.base} experiment-card`}>
-              <h3 className="card-title">{track.title}</h3>
-              <p className="card-text">{track.summary}</p>
-              <ul>
-                {track.milestones.map((milestone) => (
-                  <li key={milestone}>{milestone}</li>
-                ))}
-              </ul>
-              <button className={`${buttonTokens.shared} ${buttonTokens.secondary}`} onClick={() => navigate('/plan-my-workflow')}>
-                {playbook.experiments.addButton}
-              </button>
-            </article>
+            <details key={track.title} className="experiment-disclosure">
+              <summary>{track.title}<span aria-hidden="true">+</span></summary>
+              <div className="experiment-disclosure__body">
+                <p className="card-text">{track.summary}</p>
+                <ul>
+                  {track.milestones.map((milestone) => (
+                    <li key={milestone}>{milestone}</li>
+                  ))}
+                </ul>
+              </div>
+            </details>
           ))}
         </div>
+        <NavLink to="/plan-my-workflow" className={`${buttonTokens.shared} ${buttonTokens.primary}`}>
+          {playbook.hero.primaryCta} <span aria-hidden="true">↗</span>
+        </NavLink>
       </section>
     </>
   )

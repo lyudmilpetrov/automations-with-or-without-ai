@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type MouseEvent, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from 'react'
 import { createRouteHref, getPathFromHash, normalizePath, shouldHandleNavigation } from './hashRouting'
 import { RouterContext, useRouter } from './useRouter'
 
@@ -71,7 +71,16 @@ export const RouterProvider = ({ routes, children }: { routes: RouteDefinition[]
 }
 
 export const RouterOutlet = () => {
-  const { routeElement } = useRouter()
+  const { routeElement, path } = useRouter()
+  const previousPath = useRef(path)
+
+  useEffect(() => {
+    if (previousPath.current === path) return
+    previousPath.current = path
+    document.getElementById('page-heading')?.focus({ preventScroll: true })
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [path])
+
   return <>{routeElement}</>
 }
 

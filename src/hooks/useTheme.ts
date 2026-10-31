@@ -4,12 +4,16 @@ type ThemeMode = 'light' | 'dark'
 
 const STORAGE_KEY = 'automation-theme-preference'
 
+const getStoredTheme = () => {
+  try { return window.localStorage.getItem(STORAGE_KEY) } catch { return null }
+}
+
 const getPreferredTheme = (): ThemeMode => {
   if (typeof window === 'undefined') {
     return 'dark'
   }
 
-  const stored = window.localStorage.getItem(STORAGE_KEY) as ThemeMode | null
+  const stored = getStoredTheme()
   if (stored === 'light' || stored === 'dark') {
     return stored
   }
@@ -29,13 +33,13 @@ export const useTheme = () => {
     }
 
     document.body.classList.toggle('dark', mode === 'dark')
-    window.localStorage.setItem(STORAGE_KEY, mode)
+    try { window.localStorage.setItem(STORAGE_KEY, mode) } catch { /* Theme selection works without storage. */ }
   }, [mode])
 
   useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: dark)')
     const listener = (event: MediaQueryListEvent) => {
-      const stored = window.localStorage.getItem(STORAGE_KEY)
+      const stored = getStoredTheme()
       if (!stored) {
         setMode(event.matches ? 'dark' : 'light')
       }

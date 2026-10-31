@@ -12,7 +12,9 @@ npm ci
 npm run dev
 ```
 
-Vite serves the app at `http://localhost:5173/automations-with-or-without-ai/`.
+`npm run dev` starts Vite and automatically opens Microsoft Edge at
+`http://localhost:5173/automations-with-or-without-ai/`. Microsoft Edge must be
+installed. If port 5173 is already in use, Vite opens the next available port.
 
 Run the same checks as CI before publishing:
 
