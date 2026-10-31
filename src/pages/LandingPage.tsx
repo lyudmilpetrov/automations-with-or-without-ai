@@ -14,10 +14,6 @@ export const LandingPage = () => {
     document.title = landing.documentTitle
   }, [landing.documentTitle])
 
-  useEffect(() => {
-    setActiveTier(landing.adaptive.tiers[0]?.id ?? '')
-  }, [landing])
-
   return (
     <>
       <section className={layoutTokens.hero}>

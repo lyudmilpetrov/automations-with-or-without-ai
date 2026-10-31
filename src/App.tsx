@@ -8,7 +8,7 @@ import './App.css'
 
 function App() {
   const { mode, toggle } = useTheme()
-  const { t } = useI18n()
+  const { t, language } = useI18n()
   const headerCopy = t.header
   const navLinks = [
     { path: '/', label: headerCopy.nav.landing },
@@ -40,7 +40,7 @@ function App() {
               </div>
             </div>
           </header>
-          <RouterOutlet />
+          <RouterOutlet key={language} />
         </main>
       </div>
     </RouterProvider>

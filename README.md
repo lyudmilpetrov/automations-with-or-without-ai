@@ -1,73 +1,67 @@
-# React + TypeScript + Vite
+# Automations with or without AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React, TypeScript, and Vite application published at
+[lyudmilpetrov.github.io/automations-with-or-without-ai](https://lyudmilpetrov.github.io/automations-with-or-without-ai/).
 
-Currently, two official plugins are available:
+## Local development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Use Node.js 24 and the committed npm lockfile, matching GitHub Actions:
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm ci
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Vite serves the app at `http://localhost:5173/automations-with-or-without-ai/`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Run the same checks as CI before publishing:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```sh
+npm run lint
+node --test src/router/*.test.mjs
+npm run build
 ```
+
+To inspect the production build, run `npm run preview` and open
+`http://localhost:4173/automations-with-or-without-ai/`.
+
+## Automatic GitHub Pages deployment
+
+[`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) follows
+the deployment pattern used in `client-side-free-ai`:
+
+1. Each push to `main` installs locked dependencies, runs lint and navigation
+   tests, and builds the production site.
+2. Only a successful build uploads `dist/` and deploys it to GitHub Pages.
+3. Pull requests targeting `main` run the same validation without deploying.
+
+After the one-time setup below, commit and push source changes to `main` (or merge
+a pull request into `main`) to update the website automatically. There is no need
+to commit `dist/` or update a `gh-pages` branch. The workflow uses GitHub's built-in
+token; no personal access token or repository secret is required.
+
+### One-time repository setup
+
+In [Settings → Pages](https://github.com/lyudmilpetrov/automations-with-or-without-ai/settings/pages),
+set **Build and deployment → Source → GitHub Actions**. This replaces the previous
+`gh-pages` branch publishing source, as described in
+[GitHub's custom workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+
+If the `github-pages` environment restricts deployment branches, ensure `main` is
+allowed under **Settings → Environments → github-pages**. A restriction left over
+from `gh-pages` publishing can otherwise block the first deployment.
+
+Push the workflow and source changes to `main`. Track the first deployment in
+[Actions](https://github.com/lyudmilpetrov/automations-with-or-without-ai/actions/workflows/deploy-pages.yml).
+Subsequent pushes deploy automatically. To republish without a code change,
+select **Deploy to GitHub Pages → Run workflow**, choosing `main`.
+
+### Project URL and navigation
+
+`vite.config.ts` sets `base: '/automations-with-or-without-ai/'`, following
+[Vite's project-site deployment guidance](https://vite.dev/guide/static-deploy.html#github-pages).
+Assets and navigation must remain under that project path.
+
+Navigation uses hash URLs, for example
+`/automations-with-or-without-ai/#/plan-my-workflow`, so direct links and reloads
+work on GitHub Pages without server-side route rewrites.

@@ -19,10 +19,6 @@ export const PlanWorkflowPage = () => {
     document.title = planner.documentTitle
   }, [planner.documentTitle])
 
-  useEffect(() => {
-    setSelectedGoal(planner.workflowGoals[0]?.id ?? '')
-  }, [planner.workflowGoals])
-
   return (
     <>
       <section className={`${layoutTokens.hero} planner-hero`}>

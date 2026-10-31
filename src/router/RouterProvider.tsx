@@ -1,29 +1,17 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type MouseEvent, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useState, type MouseEvent, type ReactNode } from 'react'
+import { createRouteHref, getPathFromHash, normalizePath, shouldHandleNavigation } from './hashRouting'
+import { RouterContext, useRouter } from './useRouter'
 
 type RouteDefinition = {
   path: string
   element: ReactNode
 }
 
-type RouterContextValue = {
-  path: string
-  navigate: (to: string) => void
-  routeElement: ReactNode
-}
-
-const RouterContext = createContext<RouterContextValue | null>(null)
-
-const normalizePath = (value: string) => {
-  if (!value) return '/'
-  if (value === '/') return value
-  return value.endsWith('/') ? value.slice(0, -1) : value
-}
-
 const getInitialPath = () => {
   if (typeof window === 'undefined') {
     return '/'
   }
-  return normalizePath(window.location.pathname || '/')
+  return getPathFromHash(window.location.hash)
 }
 
 export const RouterProvider = ({ routes, children }: { routes: RouteDefinition[]; children: ReactNode }) => {
@@ -34,13 +22,15 @@ export const RouterProvider = ({ routes, children }: { routes: RouteDefinition[]
       return
     }
 
-    const handlePopState = () => {
+    const handleLocationChange = () => {
       setPath(getInitialPath())
     }
 
-    window.addEventListener('popstate', handlePopState)
+    window.addEventListener('popstate', handleLocationChange)
+    window.addEventListener('hashchange', handleLocationChange)
     return () => {
-      window.removeEventListener('popstate', handlePopState)
+      window.removeEventListener('popstate', handleLocationChange)
+      window.removeEventListener('hashchange', handleLocationChange)
     }
   }, [])
 
@@ -57,7 +47,7 @@ export const RouterProvider = ({ routes, children }: { routes: RouteDefinition[]
         return
       }
 
-      window.history.pushState({}, '', normalized)
+      window.history.pushState({}, '', createRouteHref(normalized, import.meta.env.BASE_URL))
       setPath(normalized)
     },
     [path],
@@ -78,14 +68,6 @@ export const RouterProvider = ({ routes, children }: { routes: RouteDefinition[]
   )
 
   return <RouterContext.Provider value={value}>{children}</RouterContext.Provider>
-}
-
-export const useRouter = () => {
-  const context = useContext(RouterContext)
-  if (!context) {
-    throw new Error('useRouter must be used within a RouterProvider')
-  }
-  return context
 }
 
 export const RouterOutlet = () => {
@@ -109,6 +91,7 @@ export const NavLink = ({
   const isActive = path === normalized
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (!shouldHandleNavigation(event)) return
     event.preventDefault()
     navigate(normalized)
   }
@@ -116,7 +99,7 @@ export const NavLink = ({
   const classes = [className, isActive ? activeClassName : ''].filter(Boolean).join(' ').trim()
 
   return (
-    <a href={to} className={classes} aria-current={isActive ? 'page' : undefined} onClick={handleClick}>
+    <a href={createRouteHref(normalized, import.meta.env.BASE_URL)} className={classes} aria-current={isActive ? 'page' : undefined} onClick={handleClick}>
       {children}
     </a>
   )
