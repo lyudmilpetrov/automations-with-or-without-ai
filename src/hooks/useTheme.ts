@@ -33,6 +33,10 @@ export const useTheme = () => {
     }
 
     document.body.classList.toggle('dark', mode === 'dark')
+    document.querySelector('meta[name="theme-color"]')?.setAttribute(
+      'content',
+      mode === 'dark' ? '#14231c' : '#f8faf7',
+    )
     try { window.localStorage.setItem(STORAGE_KEY, mode) } catch { /* Theme selection works without storage. */ }
   }, [mode])
 

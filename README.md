@@ -27,6 +27,28 @@ npm run build
 To inspect the production build, run `npm run preview` and open
 `http://localhost:4173/automations-with-or-without-ai/`.
 
+## Installable web app (PWA)
+
+The app supports installation with its own icon and a standalone window. The
+manifest supplies a stable app ID, project-scoped launch URL, 192px and 512px PNG
+icons, and a maskable Android icon. An Apple touch icon supports iOS home screens.
+The browser's window color follows the selected light or dark theme.
+
+Installation uses the browser's built-in controls: the install icon or app menu
+in Chrome and Edge, or **Share → Add to Home Screen** on iOS. Install promotion
+depends on browser support and engagement; it may not appear on the first visit.
+Use the HTTPS GitHub Pages URL or localhost when checking installation.
+
+The app requires a network connection. It uses normal browser HTTP caching with
+no service worker, offline cache, background sync, or PWA dependency. A service
+worker is [not required for installation](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable).
+
+To verify a production build, open browser DevTools → **Application → Manifest**
+and check the name, standalone display, start URL, scope, and loaded icons. Install
+the app using the browser controls, launch it, and check that navigation and
+reloads work in its standalone window. On iOS, check the home-screen icon and launch
+using Add to Home Screen.
+
 ## Automatic GitHub Pages deployment
 
 [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) follows
